@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Dokumentverwaltung mit Labels (#4201)
 - Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)
 - Konfigurierbare Ausweise mit Apple und Google Wallet Integration (#3911)
 - Gruppen Sammelrechnungen können kopiert werden (#3754)
