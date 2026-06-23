@@ -5,25 +5,41 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito
 
-class PersonalDocumentsController < CrudController
+class Person::DocumentsController < CrudController
   self.nesting = Group, Person
   self.permitted_attrs = [:file, :label_id, :description]
+  delegate :model_class, to: :class
+
+  skip_authorize_resource
+  before_action :do_authorize, except: :index
 
   before_save :set_author
+
+  def self.model_class
+    PersonalDocument
+  end
 
   def authorize_class
     authorize!(:index, PersonalDocument.new(person: parent))
   end
 
   def create
-    super(location: index_path)
+    super(location: documents_index_path)
   end
 
   def update
-    super(location: index_path)
+    super(location: documents_index_path)
   end
 
   private
+
+  def documents_index_path
+    group_person_documents_path(*parents, returning: true)
+  end
+
+  def do_authorize
+    authorize!(action_name.to_sym, entry)
+  end
 
   def build_entry
     parent.personal_documents.build

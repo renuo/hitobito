@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe PersonalDocumentsController do
+describe Person::DocumentsController do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:group) { bottom_member.groups.first }
@@ -54,7 +54,7 @@ describe PersonalDocumentsController do
       end.to change(PersonalDocument, :count).by(1)
 
       expect(response).to redirect_to(
-        group_person_personal_documents_path(group, bottom_member, returning: true)
+        group_person_documents_path(group, bottom_member, returning: true)
       )
     end
   end
