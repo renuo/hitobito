@@ -30,4 +30,24 @@ describe Event::LogController do
       expect(versions.size).to eq(4)
     end
   end
+
+  describe "GET index with a deleted question translation", versioning: true do
+    render_views
+
+    before do
+      sign_in(person)
+
+      # create an "update" version on the question's translation, then remove the
+      # question so the translation the version points to no longer exists.
+      question = Fabricate(:event_question, event: event, question: "Wie alt bist du?")
+      question.update!(question: "Wie alt bist du wirklich?")
+      question.destroy!
+    end
+
+    it "does not raise when the translation version's item has been deleted" do
+      expect {
+        get :index, params: {group_id: event.groups.first.id, id: event.id}
+      }.not_to raise_error
+    end
+  end
 end
